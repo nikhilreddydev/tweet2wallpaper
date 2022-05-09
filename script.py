@@ -32,7 +32,7 @@ def get_new_tweet():
     response = api.search_recent_tweets(query)
     return response.data[0].text
 
-def make_wallpaper(tweet, n):
+def make_wallpaper(tweet):
     # open a template image
     img = Image.open('Background.png')
 
