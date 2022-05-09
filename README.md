@@ -14,7 +14,6 @@ pip install textwrap3
 3. Open script.py in any editor
    - set **bearer** variable to your **Bearer_token** at line 23.
    - set **username** variable to the one, whose tweets you want to receive.
-   - set **wait** variable to your desired value. This checks for new tweet on each loop.
-   - set absoulte paths(line 64 & 67) as the pwd.
+   - set **wait** variable to your desired value. This checks for new tweet on each loop (default is an hour).
 4. Now run script.py
 5. This should change your wallpaper with a recent tweet of user. If not, please raise a issue [here](https://github.com/nikhilreddydev/tweet2wallpaper/issues)

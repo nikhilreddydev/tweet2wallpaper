@@ -13,16 +13,14 @@ import textwrap
 # To know the type of current OS
 import platform
 import time
-os = platform.system()
-if os == "Windows":
+import os
+OS = platform.system()
+if OS == "Windows":
     import ctypes
-else:
-    import os
 
 # Twitter API key
 bearer = "Your_Bearer_token"
 username = "naval"
-wait = 3600 # secs
 
 # Authentication
 api = tweepy.Client(bearer_token=bearer)
@@ -55,24 +53,30 @@ def make_wallpaper(tweet, n):
         height += line_height
 
     # new wallpaper image
-    new_wallpaper = "Wallpapers/{}.png".format(n)
+    new_wallpaper = "tweet.png"
     img.save(new_wallpaper)
     return new_wallpaper
 
 def set_wallpaper(image):
-    if os == "Windows":
-        abs_path = r"C:\Users\smart\WorkingOn\tweet2wallpaper\{}".format(image)
+    if OS == "Windows":
+        # build the wallpaper path
+        abs_path = os.path.dirname(__file__)
+        abs_path = os.path.join(abs_path, image)
+
+        # set it as wallpaper
         ctypes.windll.user32.SystemParametersInfoW(20, 0, abs_path, 0)
-    elif os == "Linux":
-        command = r"gsettings set org.gnome.desktop.background picture-uri file:///home/nikhilreddydev/tweet2wallpaper/" + image
+    
+    elif OS == "Linux":
+        abs_path = os.path.dirname(__file__)
+        abs_path = os.path.join(abs_path, image)
+        command = r"gsettings set org.gnome.desktop.background picture-uri " + image
         os.system(command)
 
 # getting tweet & setting wallpaper for first time
-n = 1
 tweet = get_new_tweet()
-print("{}. ".format(n) + tweet)
-new_wallpaper = make_wallpaper(tweet, n)
+new_wallpaper = make_wallpaper(tweet)
 set_wallpaper(new_wallpaper)
+wait = 3600 # secs
 
 # check for new tweet every 1 hour
 while True:
@@ -80,9 +84,7 @@ while True:
     new_tweet = get_new_tweet()
     # if a new tweet, create a new wallpaper & set it as background
     if  new_tweet != tweet:
-        n += 1     
-        print("{}.".format(n) + tweet)
-        new_wallpaper = make_wallpaper(tweet, n)
+        new_wallpaper = make_wallpaper(tweet)
         set_wallpaper(new_wallpaper)
     else:
         print("No new tweet")
